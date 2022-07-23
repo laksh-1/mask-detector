@@ -22,8 +22,11 @@ import os
 
 # initialize the initial learning rate, number of epochs to train for,
 # and batch size
+# less learning rate gives better accuracy
 INIT_LR = 1e-4
+# epoch means 1 cycle of training data
 EPOCHS = 20
+# batch size
 BS = 32
 
 DIRECTORY = r"C:\Users\laksh\Desktop\VScode\Python\Face-Mask-Detection-master\dataset"
@@ -33,13 +36,17 @@ CATEGORIES = ["with_mask", "without_mask"]
 # the list of data (i.e., images) and class images
 print("[INFO] loading images...")
 
+# appending all image array to data list
 data = []
+
+# contains whether the corresponding array in data list is with mask or without mask
 labels = []
 
 for category in CATEGORIES:
     path = os.path.join(DIRECTORY, category)
     for img in os.listdir(path):
         img_path = os.path.join(path, img)
+        # load_img comes from keras, loads target path and sets the target size
         image = load_img(img_path, target_size=(224, 224))
         image = img_to_array(image)
         image = preprocess_input(image)
@@ -48,6 +55,7 @@ for category in CATEGORIES:
         labels.append(category)
 
 # perform one-hot encoding on the labels
+# converts the character label of with and without mask to binary 0 and 1
 lb = LabelBinarizer()
 labels = lb.fit_transform(labels)
 labels = to_categorical(labels)
@@ -55,10 +63,12 @@ labels = to_categorical(labels)
 data = np.array(data, dtype="float32")
 labels = np.array(labels)
 
+# splits the dataset for training and testing, here testing part is 20% and rest is training
 (trainX, testX, trainY, testY) = train_test_split(data, labels,
                                                   test_size=0.20, stratify=labels, random_state=42)
 
 # construct the training image generator for data augmentation
+# use to create many images for the data set with a single image by doing the following changes
 aug = ImageDataGenerator(
     rotation_range=20,
     zoom_range=0.15,
@@ -70,11 +80,13 @@ aug = ImageDataGenerator(
 
 # load the MobileNetV2 network, ensuring the head FC layer sets are
 # left off
+# imagenet is kind of a pre trained model
 baseModel = MobileNetV2(weights="imagenet", include_top=False,
                         input_tensor=Input(shape=(224, 224, 3)))
 
 # construct the head of the model that will be placed on top of the
 # the base model
+# passing these attributes to avoid overfitting of our model
 headModel = baseModel.output
 headModel = AveragePooling2D(pool_size=(7, 7))(headModel)
 headModel = Flatten(name="flatten")(headModel)
@@ -98,6 +110,7 @@ model.compile(loss="binary_crossentropy", optimizer=opt,
               metrics=["accuracy"])
 
 # train the head of the network
+# creates more training data for training, uses images from line 72
 print("[INFO] training head...")
 H = model.fit(
     aug.flow(trainX, trainY, batch_size=BS),

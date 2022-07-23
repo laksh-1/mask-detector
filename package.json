@@ -1,0 +1,23 @@
+{
+  "name": "face-mask-detector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laksh-1/mask-detector.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laksh-1/mask-detector/issues"
+  },
+  "homepage": "https://github.com/laksh-1/mask-detector#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}

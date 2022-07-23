@@ -3,9 +3,7 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras.models import load_model
 from imutils.video import VideoStream
-from audioplayer import AudioPlayer
-import playsound
-import winsound
+# import winsound
 import numpy as np
 import imutils
 import time
@@ -85,12 +83,12 @@ def detect_and_predict_mask(frame, faceNet, maskNet):
 
 
 # load our serialized face detector model from disk
-prototxtPath = r"Face-Mask-Detection-master/face_detector/deploy.prototxt"
-weightsPath = r"Face-Mask-Detection-master/face_detector/res10_300x300_ssd_iter_140000.caffemodel"
+prototxtPath = r"face_detector/deploy.prototxt"
+weightsPath = r"face_detector/res10_300x300_ssd_iter_140000.caffemodel"
 faceNet = cv2.dnn.readNet(prototxtPath, weightsPath)
 
 # load the face mask detector model from disk
-maskNet = load_model("Face-Mask-Detection-master/mask_detector.model")
+maskNet = load_model("mask_detector.model")
 
 # initialize the video stream
 print("[INFO] starting video stream...")
@@ -119,12 +117,12 @@ while True:
         label = "With Mask" if mask > withoutMask else "Without Mask"
         color = (0, 255, 0) if label == "With Mask" else (0, 0, 255)
 
-        if mask > withoutMask:
-            winsound.PlaySound(
-                r'C:/Users/laksh/Desktop/VScode/Python/Face-Mask-Detection-master/alarm.wav', winsound.SND_ASYNC)
-
-        else:
-            winsound.PlaySound(None, winsound.SND_PURGE)
+        # if mask > withoutMask:
+        #     winsound.PlaySound(
+        #         r'C:/Users/laksh/Desktop/VScode/Python/Face-Mask-Detection-master/alarm.wav', winsound.SND_ASYNC)
+        #
+        # else:
+        #     winsound.PlaySound(None, winsound.SND_PURGE)
 
         # else:
         #     # alarm.stop()
