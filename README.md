@@ -19,7 +19,7 @@ The tech stack mainly used here includes: Tensorflow and Keras. Theis applicatio
 ```
 
 ## Example
-![Example Video](example.mp4)
+![](example.gif)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
